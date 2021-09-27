@@ -12,6 +12,7 @@ import {
 // component
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import Footer from './components/Footer'
 
 // pages
 import Login from './pages/Login'
@@ -34,6 +35,7 @@ function App () {
           <Route path="/">
             <Navbar/>
             <Hero/>
+            <Footer/>
           </Route>
         </Switch>
       </Router>
