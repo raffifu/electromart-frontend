@@ -1,3 +1,5 @@
+import 'react-toastify/dist/ReactToastify.css'
+
 import {
   ChakraProvider,
   theme
@@ -9,6 +11,8 @@ import {
   Route
 } from 'react-router-dom'
 
+import { ToastContainer } from 'react-toastify'
+
 // component
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -18,10 +22,24 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
 
+import setAuthToken from './utils/setAuthToken'
+
+import { store } from './redux/store'
+import { loadUser } from './redux/reducer/authSlice'
+
 function App () {
+  if (localStorage.token) { setAuthToken(localStorage.token) }
+
+  store.dispatch(loadUser())
+
   return (
     <ChakraProvider theme={theme}>
       <Router>
+        <ToastContainer
+          autoClose={3000}
+          hideProgressBar
+          pauseOnHover={false}
+          />
         <Switch>
           <Route path="/login">
             <Login/>

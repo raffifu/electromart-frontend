@@ -2,21 +2,50 @@ import {
   Flex,
   Box,
   FormControl,
-  FormLabel,
   Input,
   Stack,
   Link,
   Button,
   Heading,
   Text,
+  RadioGroup,
+  Radio,
   useColorModeValue
 } from '@chakra-ui/react'
 
+import { useState } from 'react'
+
 import {
-  Link as RouteLink
+  Link as RouteLink,
+  Redirect
 } from 'react-router-dom'
 
-export default function Register () {
+import { register } from '../redux/reducer/authSlice'
+import { store } from '../redux/store'
+import { connect } from 'react-redux'
+
+function Register ({ isAuthenticated }) {
+  if (isAuthenticated) return <Redirect to="/" />
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    role: ''
+  })
+
+  const onChange = (e) => {
+    if (typeof e === 'string') setFormData({ ...formData, role: e })
+    else { setFormData({ ...formData, [e.target.name]: e.target.value }) }
+  }
+
+  const submit = async () => {
+    store.dispatch(register(formData))
+  }
+
   return (
     <Flex
       minH={'100vh'}
@@ -37,27 +66,29 @@ export default function Register () {
           p={8}>
           <Stack spacing={4}>
             <FormControl id="firstName">
-              <FormLabel>First Name</FormLabel>
-              <Input type="firstName" />
+              <Input onChange={onChange} type="text" name="firstName" value={formData.firstName} placeholder="First Name" />
             </FormControl>
             <FormControl id="lastName">
-              <FormLabel>Last Name</FormLabel>
-              <Input type="lastName" />
+              <Input onChange={onChange} type="text" name="lastName" value={formData.lastName} placeholder="Last Name"/>
             </FormControl>
             <FormControl id="username">
-              <FormLabel>Username</FormLabel>
-              <Input type="username" />
+              <Input onChange={onChange} type="text" name="username" value={formData.username} placeholder="Username"/>
             </FormControl>
             <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input onChange={onChange} type="text" name="email" value={formData.email} placeholder="Email address"/>
             </FormControl>
             <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
+              <Input onChange={onChange} type="password" name="password" value={formData.password} placeholder="Password"/>
             </FormControl>
+              <RadioGroup onChange={onChange} value={formData.role} name="role">
+                <Stack direction="row">
+                  <Radio value="3">Seller</Radio>
+                  <Radio value="4">Constumer</Radio>
+                </Stack>
+              </RadioGroup>
             <Stack spacing={2}>
               <Button
+                onClick={submit}
                 bg={'blue.400'}
                 color={'white'}
                 _hover={{
@@ -73,3 +104,7 @@ export default function Register () {
     </Flex>
   )
 }
+
+const mapStateToProps = state => state.auth
+
+export default connect(mapStateToProps)(Register)

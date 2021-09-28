@@ -26,7 +26,9 @@ import {
   Link as RouteLink
 } from 'react-router-dom'
 
-export default function NavigationBar () {
+import { connect } from 'react-redux'
+
+function NavigationBar ({ isAuthenticated }) {
   const { isOpen, onToggle } = useDisclosure()
 
   return (
@@ -67,7 +69,8 @@ export default function NavigationBar () {
           </Flex>
         </Flex>
 
-        <Stack
+        {!isAuthenticated &&
+          <Stack
           flex={{ base: 1, md: 0 }}
           justify={'flex-end'}
           direction={'row'}
@@ -93,7 +96,7 @@ export default function NavigationBar () {
             }}>
             Sign Up
           </Button>
-        </Stack>
+        </Stack>}
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -287,3 +290,7 @@ const NAV_ITEMS = [
     href: '#'
   }
 ]
+
+const mapStateToProps = state => state.auth
+
+export default connect(mapStateToProps)(NavigationBar)

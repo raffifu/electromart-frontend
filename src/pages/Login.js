@@ -13,7 +13,26 @@ import {
   useColorModeValue
 } from '@chakra-ui/react'
 
-export default function Login () {
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { login } from '../redux/reducer/authSlice'
+
+import { useState } from 'react'
+
+function Login ({ isAuthenticated, login }) {
+  if (isAuthenticated) return <Redirect to="/" />
+
+  const [formData, setFormData] = useState({
+    identifier: '',
+    password: ''
+  })
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const submit = () => login(formData)
+
   return (
     <Flex
       minH={'100vh'}
@@ -35,11 +54,11 @@ export default function Login () {
           <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input onChange={onChange} type="text" name="identifier" value={formData.identifier} />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
-              <Input type="password" />
+              <Input onChange={onChange} type="password" name="password" value={formData.password} />
             </FormControl>
             <Stack spacing={10}>
               <Stack
@@ -50,6 +69,7 @@ export default function Login () {
                 <Link color={'blue.400'}>Forgot password?</Link>
               </Stack>
               <Button
+                onClick={submit}
                 bg={'blue.400'}
                 color={'white'}
                 _hover={{
@@ -64,3 +84,7 @@ export default function Login () {
     </Flex>
   )
 }
+
+const mapStateToProps = state => state.auth
+
+export default connect(mapStateToProps, { login })(Login)
