@@ -60,8 +60,9 @@ function NavigationBar ({ isAuthenticated }) {
           <Text
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}>
-            Logo
+            fontWeight={600}
+            color={useColorModeValue('blue.400', 'white')}>
+            Electro Mart
           </Text>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -89,10 +90,10 @@ function NavigationBar ({ isAuthenticated }) {
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
-            bg={'pink.400'}
+            bg={'blue.400'}
             to={'/register'}
             _hover={{
-              bg: 'pink.300'
+              bg: 'blue.300'
             }}>
             Sign Up
           </Button>
@@ -252,42 +253,164 @@ const MobileNavItem = ({ label, children, href }) => {
 
 const NAV_ITEMS = [
   {
-    label: 'Inspiration',
+    label: 'Computer',
     children: [
       {
-        label: 'Explore Design Work',
-        subLabel: 'Trending Design to inspire you',
+        label: 'CPU',
+        subLabel: 'RAM, Processor, Graphic Cards, Hard Drives',
         href: '#'
       },
       {
-        label: 'New & Noteworthy',
-        subLabel: 'Up-and-coming Designers',
+        label: 'Monitor',
+        href: '#'
+      },
+      {
+        label: 'Mouse & Keyboards',
         href: '#'
       }
     ]
   },
   {
-    label: 'Find Work',
+    label: 'Laptop',
     children: [
       {
-        label: 'Job Board',
-        subLabel: 'Find your dream design job',
+        label: 'Apple',
         href: '#'
       },
       {
-        label: 'Freelance Projects',
-        subLabel: 'An exclusive list for contract work',
+        label: 'HP',
+        href: '#'
+      },
+      {
+        label: 'Dell',
+        href: '#'
+      },
+      {
+        label: 'Asus',
+        href: '#'
+      },
+      {
+        label: 'Lenovo',
+        href: '#'
+      },
+      {
+        label: 'Acer',
         href: '#'
       }
     ]
   },
   {
-    label: 'Learn Design',
-    href: '#'
+    label: 'Smarthphone',
+    children: [
+      {
+        label: 'Apple',
+        href: '#'
+      },
+      {
+        label: 'Samsung',
+        href: '#'
+      },
+      {
+        label: 'Xiaomi',
+        href: '#'
+      },
+      {
+        label: 'Huawei',
+        href: '#'
+      },
+      {
+        label: 'Oppo',
+        href: '#'
+      }
+    ]
   },
   {
-    label: 'Hire Designers',
-    href: '#'
+    label: 'Laptop',
+    children: [
+      {
+        label: 'Apple',
+        href: '#'
+      },
+      {
+        label: 'HP',
+        href: '#'
+      },
+      {
+        label: 'Dell',
+        href: '#'
+      },
+      {
+        label: 'Asus',
+        href: '#'
+      },
+      {
+        label: 'Lenovo',
+        href: '#'
+      },
+      {
+        label: 'Acer',
+        href: '#'
+      }
+    ]
+  },
+  {
+    label: 'Gaming & Consoles',
+    children: [
+      {
+        label: 'Playstation',
+        href: '#'
+      },
+      {
+        label: 'Xbox',
+        href: '#'
+      },
+      {
+        label: 'Nintendo',
+        href: '#'
+      }
+    ]
+  },
+  {
+    label: 'Audio',
+    children: [
+      {
+        label: 'Speaker',
+        href: '#'
+      },
+      {
+        label: 'Earphone and Headphones',
+        href: '#'
+      },
+      {
+        label: 'Sound Systen',
+        href: '#'
+      },
+      {
+        label: 'Voice Recorder',
+        href: '#'
+      }
+    ]
+  },
+  {
+    label: 'Office Electronics',
+    children: [
+      {
+        label: 'Printer',
+        href: '#'
+      },
+      {
+        label: 'Photocopy Machine',
+        href: '#'
+      },
+      {
+        label: 'Projector',
+        href: '#'
+      },
+      {
+        label: 'Scanner',
+        href: '#'
+      }
+    ]
   }
 ]
 
