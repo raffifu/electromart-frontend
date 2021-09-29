@@ -83,7 +83,7 @@ function Register ({ isAuthenticated }) {
               <RadioGroup onChange={onChange} value={formData.role} name="role">
                 <Stack direction="row">
                   <Radio value="3">Seller</Radio>
-                  <Radio value="4">Constumer</Radio>
+                  <Radio value="4">Consumer</Radio>
                 </Stack>
               </RadioGroup>
             <Stack spacing={2}>
