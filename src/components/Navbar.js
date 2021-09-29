@@ -26,6 +26,8 @@ import {
   Link as RouteLink
 } from 'react-router-dom'
 
+import { ColorModeSwitcher } from '../ColorModeSwitcher'
+
 import { connect } from 'react-redux'
 
 function NavigationBar ({ isAuthenticated }) {
@@ -75,7 +77,6 @@ function NavigationBar ({ isAuthenticated }) {
             <DesktopNav />
           </Flex>
         </Flex>
-
         {!isAuthenticated &&
           <Stack
           flex={{ base: 1, md: 0 }}
@@ -124,6 +125,7 @@ function NavigationBar ({ isAuthenticated }) {
             Profile
           </Button>
         </Stack>}
+        <ColorModeSwitcher/>
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -346,35 +348,6 @@ const NAV_ITEMS = [
       },
       {
         label: 'Oppo',
-        href: '#'
-      }
-    ]
-  },
-  {
-    label: 'Laptop',
-    children: [
-      {
-        label: 'Apple',
-        href: '#'
-      },
-      {
-        label: 'HP',
-        href: '#'
-      },
-      {
-        label: 'Dell',
-        href: '#'
-      },
-      {
-        label: 'Asus',
-        href: '#'
-      },
-      {
-        label: 'Lenovo',
-        href: '#'
-      },
-      {
-        label: 'Acer',
         href: '#'
       }
     ]
