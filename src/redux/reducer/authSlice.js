@@ -53,7 +53,7 @@ export const loadUser = createAsyncThunk(
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
-  loading: false,
+  loading: true,
   user: null
 }
 
@@ -61,25 +61,42 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    logout (state) {
+      state.token = null
+      state.isAuthenticated = false
+      state.loading = false
+      state.user = null
+    }
   },
   extraReducers: builder => {
     builder.addCase(loadUser.fulfilled, (state, { payload }) => {
       state.isAuthenticated = true
+      state.loading = false
       state.user = payload
+    })
+
+    builder.addCase(loadUser.rejected, (state, action) => {
+      state.isAuthenticated = false
+      state.loading = false
+      state.user = null
     })
 
     builder.addCase(register.fulfilled, (state, action) => {
       state.token = action.payload.jwt
       state.user = action.payload.user
+      state.loading = false
       state.isAuthenticated = true
     })
 
     builder.addCase(login.fulfilled, (state, action) => {
       state.token = action.payload.jwt
       state.user = action.payload.user
+      state.loading = false
       state.isAuthenticated = true
     })
   }
 })
+
+export const { logout } = authSlice.actions
 
 export default authSlice.reducer

@@ -28,6 +28,8 @@ import setAuthToken from './utils/setAuthToken'
 import { store } from './redux/store'
 import { loadUser } from './redux/reducer/authSlice'
 
+import PrivateRoute from './routing/PrivateRoute'
+
 function App () {
   if (localStorage.token) { setAuthToken(localStorage.token) }
 
@@ -48,11 +50,7 @@ function App () {
           <Route path="/register">
             <Register/>
           </Route>]
-          <Route path="/ProfilePage">
-            <Navbar/>
-            <ProfilePage/>
-            <Footer/>
-          </Route>
+          <PrivateRoute path="/ProfilePage" component={ProfilePage}/>
           <Route path="/dashboard">
 
           </Route>
