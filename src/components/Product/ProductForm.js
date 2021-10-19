@@ -7,6 +7,8 @@ import {
   FormLabel,
   Icon,
   Input,
+  ListItem,
+  UnorderedList,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -20,13 +22,13 @@ import {
 } from '@chakra-ui/react'
 import { useDropzone } from 'react-dropzone'
 import { AiFillFileAdd } from 'react-icons/ai'
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 
 function ProductForm ({ auth, onSubmit, product }) {
-  // const history = useHistory()
+  const history = useHistory()
   const [formData, setFormData] = useState({
     name: product.currentProduct.name,
     price: product.currentProduct.price,
@@ -36,7 +38,7 @@ function ProductForm ({ auth, onSubmit, product }) {
     stock: product.currentProduct.stock,
     description: product.currentProduct.description
   })
-  // const [selectedFiles, setSelectedFiles] = useState([])
+  const [selectedFiles, setSelectedFiles] = useState([])
 
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -58,21 +60,20 @@ function ProductForm ({ auth, onSubmit, product }) {
     setFormData({ ...formData, stock: parseInt(e) })
   }
 
-  const submit = () => {
-    console.log('submitting')
-    onSubmit(formData)
+  const submit = async () => {
+    await onSubmit({ ...formData, files: selectedFiles })
+    history.push('/MyProduct')
   }
 
   const onDrop = useCallback(acceptedFiles => {
-    // setSelectedFiles(acceptedFiles)
-    console.log(acceptedFiles)
+    setSelectedFiles(acceptedFiles)
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: 'image/*',
-    maxFiles: 3,
-    multiple: false
+    maxFiles: 5,
+    multiple: true
   })
 
   const dropText = isDragActive
@@ -164,6 +165,7 @@ function ProductForm ({ auth, onSubmit, product }) {
             />
           </FormControl>
           <FormControl>
+            <FormLabel>Images (max 5)</FormLabel>
             <Center
               p={10}
               cursor="pointer"
@@ -180,6 +182,9 @@ function ProductForm ({ auth, onSubmit, product }) {
               <p>{dropText}</p>
             </Center>
           </FormControl>
+          <UnorderedList>
+            {selectedFiles.map(file => <ListItem key={file.path}>{file.name}</ListItem>)}
+          </UnorderedList>
           <Stack spacing={2}>
             <Button
               onClick={submit}

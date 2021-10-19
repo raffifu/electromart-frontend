@@ -6,12 +6,16 @@ export const addProduct = createAsyncThunk(
   'product/add',
   async (data, { rejectWithValue }) => {
     try {
+      const { files } = data
+      delete data.files
+
       const formData = new FormData()
       const jsonData = JSON.stringify(data)
-      console.log(jsonData)
       formData.append('data', jsonData)
-      console.log('formdata', formData)
-      //   files.map(file => formData.append('files.picture', file.selectedFile, file.selectedFile.name))
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files.picture', files[i], files[i].name)
+      }
 
       const res = await api.post('/products', formData)
       toast.success('Successfully added new product')
@@ -73,7 +77,6 @@ export const productSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(addProduct.fulfilled, (state, { payload }) => {
       state.currentProduct = payload
-      state.listProducts = []
       state.loading = false
     })
 
