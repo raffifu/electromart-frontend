@@ -6,9 +6,12 @@ export const register = createAsyncThunk(
   'auth/register',
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await api.post('/auth/local/register', formData)
-
+      await api.post('/users', formData)
       toast.success('Register Success')
+      const res = await api.post('/auth/local', {
+        identifier: formData.email,
+        password: formData.password
+      })
 
       return res.data
     } catch (error) {

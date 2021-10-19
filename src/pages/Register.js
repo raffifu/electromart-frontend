@@ -23,6 +23,7 @@ import {
 import { register } from '../redux/reducer/authSlice'
 import { store } from '../redux/store'
 import { connect } from 'react-redux'
+import { ROLES } from '../constants/roles'
 
 function Register ({ isAuthenticated }) {
   if (isAuthenticated) return <Redirect to="/" />
@@ -34,12 +35,15 @@ function Register ({ isAuthenticated }) {
     firstName: '',
     lastName: '',
     address: '',
-    role: ''
+    role: ROLES.CUSTOMER
   })
 
   const onChange = (e) => {
-    if (typeof e === 'string') setFormData({ ...formData, role: e })
-    else { setFormData({ ...formData, [e.target.name]: e.target.value }) }
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const changeRole = (e) => {
+    setFormData({ ...formData, role: parseInt(e) })
   }
 
   const submit = async () => {
@@ -80,10 +84,10 @@ function Register ({ isAuthenticated }) {
             <FormControl id="password">
               <Input onChange={onChange} type="password" name="password" value={formData.password} placeholder="Password"/>
             </FormControl>
-              <RadioGroup onChange={onChange} value={formData.role} name="role">
+              <RadioGroup onChange={changeRole} value={formData.role} name="role">
                 <Stack direction="row">
-                  <Radio value="3">Seller</Radio>
-                  <Radio value="4">Consumer</Radio>
+                  <Radio value={ROLES.CUSTOMER}>Consumer</Radio>
+                  <Radio value={ROLES.SELLER}>Seller</Radio>
                 </Stack>
               </RadioGroup>
             <Stack spacing={2}>
