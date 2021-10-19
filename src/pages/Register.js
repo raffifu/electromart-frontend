@@ -23,7 +23,7 @@ import {
 import { register } from '../redux/reducer/authSlice'
 import { store } from '../redux/store'
 import { connect } from 'react-redux'
-import { ROLES } from '../constants/roles'
+import { ROLES } from '../constants'
 
 function Register ({ isAuthenticated }) {
   if (isAuthenticated) return <Redirect to="/" />

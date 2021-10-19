@@ -1,7 +1,7 @@
 import { Badge, Box, Image } from '@chakra-ui/react'
 
-import NoImage from '../assets/images/no_image.png'
-import { backendUrl } from '../constants/backend'
+import NoImage from '../../assets/images/no_image.png'
+import { backendUrl } from '../../constants'
 
 export default function ProductCard ({ actions, product }) {
   const thumbnailUrl = product.picture.length > 0 ? `${backendUrl}${product.picture[0].formats.thumbnail.url}` : NoImage

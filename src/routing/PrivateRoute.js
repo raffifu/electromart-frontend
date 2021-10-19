@@ -2,9 +2,13 @@ import { Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Center, Spinner } from '@chakra-ui/react'
 
+import { ROLES } from '../constants'
+
 const PrivateRoute = ({
   component: Component,
+  allowedRoles,
   isAuthenticated,
+  user,
   loading,
   ...rest
 }) => (
@@ -23,7 +27,7 @@ const PrivateRoute = ({
             />
         </Center>
           )
-        : isAuthenticated
+        : isAuthenticated && allowedRoles.includes(user.role.id)
           ? (<Component {...props} />)
           : (
         <Redirect to="/login" />
@@ -31,6 +35,10 @@ const PrivateRoute = ({
     }
   />
 )
+
+PrivateRoute.defaultProps = {
+  allowedRoles: [ROLES.SELLER, ROLES.CUSTOMER]
+}
 
 const mapStateToProps = state => state.auth
 

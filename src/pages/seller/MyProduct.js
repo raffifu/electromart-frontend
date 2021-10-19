@@ -1,6 +1,6 @@
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
-import ProductTable from '../../components/ProductTable'
+import ProductList from '../../components/Product/ProductList'
 
 import { getProducts } from '../../redux/reducer/productSlice'
 
@@ -28,7 +28,7 @@ function MyProduct ({ auth, product, getProducts }) {
             />
         </Center>
           )
-        : <ProductTable products={product.listProducts} />
+        : <ProductList products={product.listProducts} />
     }
     <Footer/>
     </>

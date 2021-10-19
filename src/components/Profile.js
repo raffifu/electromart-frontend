@@ -11,7 +11,7 @@ import {
   useColorModeValue
 } from '@chakra-ui/react'
 
-import { ROLES } from '../constants/roles'
+import { ROLES } from '../constants'
 import { logout } from '../redux/reducer/authSlice'
 import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'

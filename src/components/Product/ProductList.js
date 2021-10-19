@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Grid,
   Modal,
   ModalOverlay,
@@ -9,6 +10,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  SimpleGrid,
   useDisclosure
 } from '@chakra-ui/react'
 import { useHistory } from 'react-router-dom'
@@ -17,7 +19,11 @@ import { connect } from 'react-redux'
 
 import ProductCard from './ProductCard'
 
-function ProductTable (props) {
+const NoProductComponent = () => (<Center h="400px" color="grey">
+No product found
+</Center>)
+
+function ProductList (props) {
   const history = useHistory()
   const [selectedProduct, setSelectedProduct] = useState(null)
   const { products, auth } = props
@@ -36,33 +42,40 @@ function ProductTable (props) {
             size="xs"
             colorScheme="green"
             onClick={() => {
-              history.push('/products/add')
+              history.push('/AddProduct')
             }}
-            >
-              Add Product
+          >
+            Add Product
           </Button>
         </Box>
       )}
-      <Grid templateColumns="repeat(4, 1fr)" gap={6} marginLeft="40px" marginRight="40px">
+
+      {products.length === 0 && <NoProductComponent />}
+
+      <SimpleGrid
+        minChildWidth="240px"
+        spacing="40px"
+        margin="40px"
+      >
         {products.map(product => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            actions={(
-              <Grid>
-                <Button colorScheme="blue">Edit</Button>
-                <Button
-                onClick={() => {
-                  setSelectedProduct(product.id)
-                  onOpen()
-                }}
-                colorScheme="red"
-                >
-                Delete
-                </Button>
-              </Grid>
-            )}
-          />
+            <ProductCard
+              key={product.id}
+              product={product}
+              actions={
+                <Grid>
+                  <Button colorScheme="blue">Edit</Button>
+                  <Button
+                    onClick={() => {
+                      setSelectedProduct(product.id)
+                      onOpen()
+                    }}
+                    colorScheme="red"
+                  >
+                    Delete
+                  </Button>
+                </Grid>
+              }
+            />
         ))}
         <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -76,7 +89,7 @@ function ProductTable (props) {
               <Button
                 colorScheme="red"
                 mr={3}
-                onClick={() => (console.log(`TODO ${selectedProduct}`))}
+                onClick={() => console.log(`TODO ${selectedProduct}`)}
               >
                 Delete
               </Button>
@@ -84,7 +97,7 @@ function ProductTable (props) {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </Grid>
+      </SimpleGrid>
     </>
   )
 }
@@ -94,4 +107,4 @@ const mapStateToProps = (state, ownProps) => ({
   products: ownProps.products
 })
 
-export default connect(mapStateToProps)(ProductTable)
+export default connect(mapStateToProps)(ProductList)

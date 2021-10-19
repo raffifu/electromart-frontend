@@ -4,11 +4,17 @@ import { toast } from 'react-toastify'
 
 export const addProduct = createAsyncThunk(
   'product/add',
-  async (formData, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const res = await api.post('/products', formData)
-      toast.success('Register Success')
+      const formData = new FormData()
+      const jsonData = JSON.stringify(data)
+      console.log(jsonData)
+      formData.append('data', jsonData)
+      console.log('formdata', formData)
+      //   files.map(file => formData.append('files.picture', file.selectedFile, file.selectedFile.name))
 
+      const res = await api.post('/products', formData)
+      toast.success('Successfully added new product')
       return res.data
     } catch (error) {
       const messages = error.response.data.message[0].messages
@@ -49,7 +55,15 @@ export const getProducts = createAsyncThunk(
 
 const initialState = {
   listProducts: [],
-  currentProduct: null,
+  currentProduct: {
+    name: '',
+    price: 0,
+    weightInGrams: 0,
+    condition: 'new',
+    users_permissions_user: '',
+    stock: 0,
+    description: ''
+  },
   loading: true
 }
 
@@ -64,7 +78,7 @@ export const productSlice = createSlice({
     })
 
     builder.addCase(getProducts.fulfilled, (state, { payload }) => {
-      state.currentProduct = null
+      state.currentProduct = initialState.currentProduct
       state.listProducts = payload
       state.loading = false
     })
