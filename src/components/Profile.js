@@ -11,10 +11,13 @@ import {
   useColorModeValue
 } from '@chakra-ui/react'
 
+import { ROLES } from '../constants'
 import { logout } from '../redux/reducer/authSlice'
+import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 function Profile ({ user, logout }) {
+  const history = useHistory()
   return (
       <Center py={0}>
         <Box
@@ -48,7 +51,7 @@ function Profile ({ user, logout }) {
               <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
                 {user.username}
               </Heading>
-              <Text color={'gray.500'}>Seller</Text>
+              <Text color={'gray.500'}>{user.role.name}</Text>
             </Stack>
 
             <Stack direction={'row'} justify={'center'} spacing={6}>
@@ -64,21 +67,27 @@ function Profile ({ user, logout }) {
               </Stack>
             </Stack>
 
-            <Button
-              w={250}
-              display={'block'}
-              margin={'auto'}
-              mt={8}
-              mb={2}
-              bg={useColorModeValue('#151f21', 'gray.900')}
-              color={'white'}
-              rounded={'md'}
-              _hover={{
-                transform: 'translateY(-2px)',
-                boxShadow: 'lg'
-              }}>
-              My Products
-            </Button>
+            {
+              user.role.id === ROLES.SELLER && (
+                <Button
+                  w={250}
+                  display={'block'}
+                  margin={'auto'}
+                  mt={8}
+                  mb={2}
+                  bg={useColorModeValue('#151f21', 'gray.900')}
+                  color={'white'}
+                  rounded={'md'}
+                  _hover={{
+                    transform: 'translateY(-2px)',
+                    boxShadow: 'lg'
+                  }}
+                  onClick = {() => history.push('/MyProduct')}
+                  >
+                  My Products
+                </Button>
+              )
+            }
             <Button
               onClick={logout}
               w={250}

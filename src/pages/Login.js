@@ -13,7 +13,7 @@ import {
   useColorModeValue
 } from '@chakra-ui/react'
 
-import { Redirect } from 'react-router-dom'
+import { Link as RouteLink, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../redux/reducer/authSlice'
 
@@ -68,15 +68,18 @@ function Login ({ isAuthenticated, login }) {
                 <Checkbox>Remember me</Checkbox>
                 <Link color={'blue.400'}>Forgot password?</Link>
               </Stack>
-              <Button
-                onClick={submit}
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500'
-                }}>
-                Sign in
-              </Button>
+              <Stack spacing={2}>
+                <Button
+                  onClick={submit}
+                  bg={'blue.400'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'blue.500'
+                  }}>
+                  Sign in
+                </Button>
+                <Link as={RouteLink} to='/register' color={'blue.400'}>Do not have an account? Register now</Link>
+              </Stack>
             </Stack>
           </Stack>
         </Box>
