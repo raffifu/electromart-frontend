@@ -46,14 +46,26 @@ function App () {
           </Route>
           {/* Private Routes */}
           <PrivateRoute path="/ProfilePage" component={ProfilePage} />
-          {productRoutes.map(route => (
-            <PrivateRoute
-              key={route.path}
-              path={route.path}
-              component={route.component}
-              allowedRoles={route.allowedRoles}
-            />
-          ))}
+          {productRoutes.map(route => {
+            if (route.type === 'private') {
+              return (
+                <PrivateRoute
+                  key={route.path}
+                  path={route.path}
+                  component={route.component}
+                  allowedRoles={route.allowedRoles}
+                />
+              )
+            }
+            const { component: Component } = route
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                render={props => <Component {...props} />}
+              />
+            )
+          })}
           <Route path="/dashboard"></Route>
           <Route path="/">
             <Navbar />

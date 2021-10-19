@@ -66,7 +66,8 @@ const initialState = {
     condition: 'new',
     users_permissions_user: '',
     stock: 0,
-    description: ''
+    description: '',
+    picture: []
   },
   loading: true
 }
@@ -89,6 +90,11 @@ export const productSlice = createSlice({
     builder.addCase(getProductById.fulfilled, (state, { payload }) => {
       state.currentProduct = payload
       state.listProducts = []
+      state.loading = false
+    })
+
+    builder.addCase(getProductById.rejected, (state) => {
+      state.currentProduct = null
       state.loading = false
     })
   }

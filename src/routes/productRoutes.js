@@ -1,5 +1,6 @@
 import MyProduct from '../pages/seller/MyProduct'
 import AddProduct from '../pages/seller/AddProduct'
+import ShowProduct from '../pages/global/ShowProduct'
 
 import { ROLES } from '../constants'
 
@@ -7,13 +8,19 @@ const productRoutes = [
   {
     path: '/MyProduct',
     component: MyProduct,
-    allowedRoles: [ROLES.SELLER]
-
+    allowedRoles: [ROLES.SELLER],
+    type: 'private'
   },
   {
     path: '/AddProduct',
     component: AddProduct,
-    allowedRoles: [ROLES.SELLER]
+    allowedRoles: [ROLES.SELLER],
+    type: 'private'
+  },
+  {
+    path: '/product/:id',
+    component: ShowProduct,
+    type: 'public'
   }
 ]
 
