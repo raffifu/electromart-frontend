@@ -23,7 +23,7 @@ function ProductDetail ({ product, actions }) {
     if (product && product.picture.length > 0) {
       setImages(
         product.picture.map(pic => ({
-          image: `${backendUrl}${pic.formats.medium.url}`,
+          image: backendUrl + pic.formats.medium.url,
           alt: pic.name,
           width: pic.formats.medium.width,
           height: pic.formats.medium.height

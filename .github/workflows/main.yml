@@ -20,5 +20,4 @@ jobs:
           script: |
             cd /home/workshop/Projects/electromart-frontend
             git pull origin main
-            make install
-            make rebuildstaticfiles
+            make cleanbuild
