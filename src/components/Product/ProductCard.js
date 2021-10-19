@@ -1,9 +1,11 @@
 import { Badge, Box, Image } from '@chakra-ui/react'
+import { useHistory } from 'react-router-dom'
 
 import NoImage from '../../assets/images/no_image.png'
 import { backendUrl } from '../../constants'
 
 export default function ProductCard ({ actions, product }) {
+  const history = useHistory()
   const thumbnailUrl = product.picture.length > 0 ? `${backendUrl}${product.picture[0].formats.thumbnail.url}` : NoImage
 
   return (
@@ -16,6 +18,10 @@ export default function ProductCard ({ actions, product }) {
       display="flex"
       justifyContent="space-between"
       flexDirection="column"
+      onClick={() => {
+        history.push('/product/' + product.id)
+      }}
+      style={{ cursor: 'pointer' }}
     >
       <Image
         height="100px"

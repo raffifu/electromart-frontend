@@ -13,6 +13,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 
+import { ROLES } from '../../constants'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ProductDetail from '../../components/Product/ProductDetail'
@@ -30,7 +31,8 @@ const NoProductComponent = () => (
 
 function ShowProduct ({ id, auth, product, getProductById }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const actions = (
+
+  const SellerActions = (
     <Box display="flex" justifyContent="flex-end">
       <Button colorScheme="blue">Edit</Button>
       <Button
@@ -43,6 +45,26 @@ function ShowProduct ({ id, auth, product, getProductById }) {
       </Button>
     </Box>
   )
+
+  const CustomerActions = (
+    <Box display="flex" justifyContent="flex-end">
+      <Button colorScheme="teal">Add to cart</Button>
+    </Box>
+  )
+
+  const generateActionComponents = () => {
+    if (auth.isAuthenticated && auth.user.role === ROLES.CUSTOMER) {
+      return CustomerActions
+    }
+
+    if (
+      auth.isAuthenticated &&
+      product.currentProduct.users_permissions_user.id === auth.user.id
+    ) {
+      return SellerActions
+    }
+    return <></>
+  }
 
   useEffect(() => {
     if (id) getProductById(id)
@@ -62,12 +84,15 @@ function ShowProduct ({ id, auth, product, getProductById }) {
           />
         </Center>
       )}
-      {product.currentProduct === null
+      {!product.loading && product.currentProduct === null
         ? (
         <NoProductComponent />
           )
         : (
-        <ProductDetail product={product.currentProduct} actions={actions} />
+        <ProductDetail
+          product={product.currentProduct}
+          actions={generateActionComponents()}
+        />
           )}
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

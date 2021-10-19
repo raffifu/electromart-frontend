@@ -47,6 +47,7 @@ function ProductDetail ({ product, actions }) {
         <Box display="flex" justifyContent="space-between">
           <IconButton
             aria-label="icon"
+            disabled={images.length <= 1}
             icon={<ChevronLeftIcon />}
             onClick={() =>
               setDisplayImageIndex(
@@ -59,6 +60,7 @@ function ProductDetail ({ product, actions }) {
           <IconButton
             aria-label="icon"
             icon={<ChevronRightIcon />}
+            disabled={images.length <= 1}
             onClick={() =>
               setDisplayImageIndex(
                 (((displayImageIndex + 1) % images.length) + images.length) %
