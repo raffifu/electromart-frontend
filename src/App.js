@@ -22,6 +22,7 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ProfilePage from './pages/ProfilePage'
+import MyProduct from './pages/seller/MyProduct'
 
 import setAuthToken from './utils/setAuthToken'
 
@@ -51,6 +52,7 @@ function App () {
             <Register/>
           </Route>]
           <PrivateRoute path="/ProfilePage" component={ProfilePage}/>
+          <PrivateRoute path="/MyProduct" component={MyProduct}/>
           <Route path="/dashboard">
 
           </Route>

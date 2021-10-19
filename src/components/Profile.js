@@ -13,9 +13,11 @@ import {
 
 import { ROLES } from '../constants/roles'
 import { logout } from '../redux/reducer/authSlice'
+import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 function Profile ({ user, logout }) {
+  const history = useHistory()
   return (
       <Center py={0}>
         <Box
@@ -79,7 +81,9 @@ function Profile ({ user, logout }) {
                   _hover={{
                     transform: 'translateY(-2px)',
                     boxShadow: 'lg'
-                  }}>
+                  }}
+                  onClick = {() => history.push('/MyProduct')}
+                  >
                   My Products
                 </Button>
               )
