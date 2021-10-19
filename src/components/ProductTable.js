@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Grid,
   Modal,
@@ -25,16 +26,24 @@ function ProductTable (props) {
   return (
     <>
       {auth.isAuthenticated && (
-        <Button
-        colorScheme="green"
-        onClick={() => {
-          history.push('/products/add')
-        }}
+        <Box
+          margin="40px"
+          display="flex"
+          justifyContent="flex-end"
+          flexDirection="row"
         >
-          Add Products
-        </Button>
+          <Button
+            size="xs"
+            colorScheme="green"
+            onClick={() => {
+              history.push('/products/add')
+            }}
+            >
+              Add Product
+          </Button>
+        </Box>
       )}
-      <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+      <Grid templateColumns="repeat(4, 1fr)" gap={6} marginLeft="40px" marginRight="40px">
         {products.map(product => (
           <ProductCard
             key={product.id}
