@@ -57,6 +57,24 @@ export const getProducts = createAsyncThunk(
   }
 )
 
+export const getLatestProducts = createAsyncThunk(
+  'product/latest',
+  async (limit = 6, { rejectWithValue }) => {
+    try {
+      const res = await api.get('/products', {
+        params: {
+          _limit: limit,
+          _sort: 'created_at:DESC'
+        }
+      })
+
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 export const deleteProduct = createAsyncThunk(
   'product/delete',
   async (id, { rejectWithValue }) => {
@@ -102,13 +120,19 @@ export const productSlice = createSlice({
       state.loading = false
     })
 
+    builder.addCase(getLatestProducts.fulfilled, (state, { payload }) => {
+      state.currentProduct = initialState.currentProduct
+      state.listProducts = payload
+      state.loading = false
+    })
+
     builder.addCase(getProductById.fulfilled, (state, { payload }) => {
       state.currentProduct = payload
       state.listProducts = []
       state.loading = false
     })
 
-    builder.addCase(getProductById.rejected, (state) => {
+    builder.addCase(getProductById.rejected, state => {
       state.currentProduct = null
       state.loading = false
     })
@@ -116,7 +140,9 @@ export const productSlice = createSlice({
     builder.addCase(deleteProduct.fulfilled, (state, { payload }) => {
       state.currentProduct = initialState.currentProduct
       state.loading = false
-      state.listProducts = state.listProducts.filter(product => product.id !== payload.id)
+      state.listProducts = state.listProducts.filter(
+        product => product.id !== payload.id
+      )
     })
   }
 })
