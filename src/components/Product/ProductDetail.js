@@ -19,14 +19,35 @@ function ProductDetail ({ product, actions }) {
     { image: NoImage, alt: 'No picture', width: 500, height: 362 }
   ])
 
+  const getPictureUrl = (pic) => {
+    // sometimes small pic doesn't have medium / small format -> only thumbnail
+    if (pic.formats.medium) return backendUrl + pic.formats.medium.url
+    if (pic.formats.small) return backendUrl + pic.formats.small.url
+    if (pic.formats.thumbnail) return backendUrl + pic.formats.thumbnail.url
+    return NoImage
+  }
+
+  const getPictureWidth = pic => {
+    if (pic.formats.medium) return backendUrl + pic.formats.medium.width
+    if (pic.formats.small) return backendUrl + pic.formats.small.width
+    if (pic.formats.thumbnail) return backendUrl + pic.formats.thumbnail.width
+    return 500
+  }
+  const getPictureHeight = pic => {
+    if (pic.formats.medium) return backendUrl + pic.formats.medium.height
+    if (pic.formats.small) return backendUrl + pic.formats.small.height
+    if (pic.formats.thumbnail) return backendUrl + pic.formats.thumbnail.height
+    return 362
+  }
+
   useEffect(() => {
     if (product && product.picture.length > 0) {
       setImages(
         product.picture.map(pic => ({
-          image: backendUrl + pic.formats.medium.url,
+          image: getPictureUrl(pic),
           alt: pic.name,
-          width: pic.formats.medium.width,
-          height: pic.formats.medium.height
+          width: getPictureWidth(pic),
+          height: getPictureHeight(pic)
         }))
       )
     }
@@ -39,6 +60,7 @@ function ProductDetail ({ product, actions }) {
           <Image
             height={images[displayImageIndex].height}
             width={images[displayImageIndex].width}
+            objectFit="cover"
             overflow="hidden"
             src={images[displayImageIndex].image}
             alt={images[displayImageIndex].name}

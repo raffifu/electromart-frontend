@@ -6,7 +6,13 @@ import { backendUrl } from '../../constants'
 
 export default function ProductCard ({ actions, product }) {
   const history = useHistory()
-  const thumbnailUrl = product.picture.length > 0 ? `${backendUrl}${product.picture[0].formats.thumbnail.url}` : NoImage
+
+  const getPictureUrl = (pic) => {
+    if (pic.formats.small) return backendUrl + pic.formats.small.url
+    if (pic.formats.thumbnail) return backendUrl + pic.formats.thumbnail.url
+    return NoImage
+  }
+  const thumbnailUrl = product.picture.length > 0 ? getPictureUrl(product.picture[0]) : NoImage
 
   return (
     <Box
@@ -31,6 +37,7 @@ export default function ProductCard ({ actions, product }) {
           minHeight="240px"
           maxHeight="240px"
           overflow="hidden"
+          objectFit="cover"
           src={thumbnailUrl}
           alt={product.name} />
         <Box>
