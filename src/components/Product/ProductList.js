@@ -13,6 +13,7 @@ import {
   SimpleGrid,
   useDisclosure
 } from '@chakra-ui/react'
+
 import { useHistory } from 'react-router-dom'
 import { useState } from 'react'
 import { connect } from 'react-redux'
@@ -26,7 +27,7 @@ No product found
 function ProductList (props) {
   const history = useHistory()
   const [selectedProduct, setSelectedProduct] = useState(null)
-  const { products, auth } = props
+  const { onDelete, products, auth } = props
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -65,7 +66,8 @@ function ProductList (props) {
                 <Grid>
                   <Button colorScheme="blue">Edit</Button>
                   <Button
-                    onClick={() => {
+                    onClick={e => {
+                      e.stopPropagation()
                       setSelectedProduct(product.id)
                       onOpen()
                     }}
@@ -89,7 +91,10 @@ function ProductList (props) {
               <Button
                 colorScheme="red"
                 mr={3}
-                onClick={() => console.log(`TODO ${selectedProduct}`)}
+                onClick={() => {
+                  onDelete(selectedProduct)
+                  onClose()
+                }}
               >
                 Delete
               </Button>
@@ -104,7 +109,8 @@ function ProductList (props) {
 
 const mapStateToProps = (state, ownProps) => ({
   auth: state.auth,
-  products: ownProps.products
+  products: ownProps.products,
+  onDelete: ownProps.onDelete
 })
 
 export default connect(mapStateToProps)(ProductList)

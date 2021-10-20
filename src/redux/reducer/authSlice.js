@@ -82,6 +82,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = false
       state.loading = false
       state.user = null
+      state.token = null
     })
 
     builder.addCase(register.fulfilled, (state, action) => {

@@ -17,8 +17,9 @@ import { ROLES } from '../../constants'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ProductDetail from '../../components/Product/ProductDetail'
+import { useHistory } from 'react-router-dom'
 
-import { getProductById } from '../../redux/reducer/productSlice'
+import { getProductById, deleteProduct } from '../../redux/reducer/productSlice'
 
 import { connect } from 'react-redux'
 import { useEffect } from 'react'
@@ -29,7 +30,8 @@ const NoProductComponent = () => (
   </Center>
 )
 
-function ShowProduct ({ id, auth, product, getProductById }) {
+function ShowProduct ({ id, auth, product, getProductById, deleteProduct }) {
+  const history = useHistory()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const SellerActions = (
@@ -53,7 +55,7 @@ function ShowProduct ({ id, auth, product, getProductById }) {
   )
 
   const generateActionComponents = () => {
-    if (auth.isAuthenticated && auth.user.role === ROLES.CUSTOMER) {
+    if (auth.isAuthenticated && auth.user.role.id === ROLES.CUSTOMER) {
       return CustomerActions
     }
 
@@ -106,7 +108,11 @@ function ShowProduct ({ id, auth, product, getProductById }) {
             <Button
               colorScheme="red"
               mr={3}
-              onClick={() => console.log(`TODO ${product.currentProduct}`)}
+              onClick={() => {
+                deleteProduct(product.currentProduct.id)
+                onClose()
+                history.goBack()
+              }}
             >
               Delete
             </Button>
@@ -125,4 +131,4 @@ const mapStateToProps = (state, ownProps) => ({
   product: state.product
 })
 
-export default connect(mapStateToProps, { getProductById })(ShowProduct)
+export default connect(mapStateToProps, { getProductById, deleteProduct })(ShowProduct)
