@@ -57,6 +57,21 @@ export const getProducts = createAsyncThunk(
   }
 )
 
+export const deleteProduct = createAsyncThunk(
+  'product/delete',
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`/products/${id}`)
+
+      toast.success('Successfully delete product')
+
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 const initialState = {
   listProducts: [],
   currentProduct: {
@@ -96,6 +111,12 @@ export const productSlice = createSlice({
     builder.addCase(getProductById.rejected, (state) => {
       state.currentProduct = null
       state.loading = false
+    })
+
+    builder.addCase(deleteProduct.fulfilled, (state, { payload }) => {
+      state.currentProduct = initialState.currentProduct
+      state.loading = false
+      state.listProducts = state.listProducts.filter(product => product.id !== payload.id)
     })
   }
 })
