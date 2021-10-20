@@ -55,7 +55,7 @@ function ShowProduct ({ id, auth, product, getProductById, deleteProduct }) {
   )
 
   const generateActionComponents = () => {
-    if (auth.isAuthenticated && auth.user.role === ROLES.CUSTOMER) {
+    if (auth.isAuthenticated && auth.user.role.id === ROLES.CUSTOMER) {
       return CustomerActions
     }
 
