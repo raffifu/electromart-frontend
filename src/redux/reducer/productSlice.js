@@ -31,6 +31,35 @@ export const addProduct = createAsyncThunk(
   }
 )
 
+export const editProduct = createAsyncThunk(
+  'product/edit',
+  async (data, { rejectWithValue }) => {
+    try {
+      const { files } = data
+      delete data.files
+
+      const formData = new FormData()
+      const jsonData = JSON.stringify(data)
+      formData.append('data', jsonData)
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files.picture', files[i], files[i].name)
+      }
+
+      const res = await api.put(`/products/${data.id}`, formData)
+      toast.success('Successfully updated product')
+      return res.data
+    } catch (error) {
+      const messages = error.response.data.message[0].messages
+      messages.forEach(message => {
+        toast.error(message.message)
+      })
+
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 export const getProductById = createAsyncThunk(
   'product/show',
   async (id, { rejectWithValue }) => {
@@ -110,6 +139,11 @@ export const productSlice = createSlice({
   initialState,
   extraReducers: builder => {
     builder.addCase(addProduct.fulfilled, (state, { payload }) => {
+      state.currentProduct = payload
+      state.loading = false
+    })
+
+    builder.addCase(editProduct.fulfilled, (state, { payload }) => {
       state.currentProduct = payload
       state.loading = false
     })

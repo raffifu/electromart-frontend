@@ -21,7 +21,7 @@ import { useEffect } from 'react'
 function Hero ({ product, getLatestProducts }) {
   useEffect(() => {
     getLatestProducts(8)
-  }, [product.listProducts])
+  }, [])
   return (
     <Container maxW={'7xl'}>
       <Stack

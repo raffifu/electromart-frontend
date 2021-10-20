@@ -11,7 +11,7 @@ import { Center, Spinner } from '@chakra-ui/react'
 function MyProduct ({ auth, product, getProducts }) {
   useEffect(() => {
     getProducts({ users_permissions_user: auth.user.id })
-  }, [product.listProducts])
+  }, [])
   return (
     <>
     <Navbar/>

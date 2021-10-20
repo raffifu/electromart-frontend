@@ -49,7 +49,15 @@ function ProductList (props) {
     ) {
       return (
         <Grid>
-          <Button colorScheme="blue">Edit</Button>
+          <Button
+            colorScheme="blue"
+            onClick={e => {
+              e.stopPropagation()
+              history.push(`/EditProduct/${product.id}`)
+            }}
+          >
+            Edit
+          </Button>
           <Button
             onClick={e => {
               e.stopPropagation()

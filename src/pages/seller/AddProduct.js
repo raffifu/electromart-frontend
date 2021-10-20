@@ -10,7 +10,7 @@ function AddProduct ({ addProduct }) {
   return (
     <>
     <Navbar/>
-    <ProductForm onSubmit={addProduct} />
+    <ProductForm onSubmit={addProduct} submitButtonText="Add Product" />
     <Footer/>
     </>
   )

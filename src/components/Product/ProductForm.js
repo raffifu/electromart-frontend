@@ -27,7 +27,7 @@ import { useHistory } from 'react-router-dom'
 import { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 
-function ProductForm ({ auth, onSubmit, product }) {
+function ProductForm ({ auth, onSubmit, product, submitButtonText }) {
   const history = useHistory()
   const [formData, setFormData] = useState({
     name: product.currentProduct.name,
@@ -62,7 +62,7 @@ function ProductForm ({ auth, onSubmit, product }) {
 
   const submit = async () => {
     await onSubmit({ ...formData, files: selectedFiles })
-    history.push('/MyProduct')
+    history.goBack()
   }
 
   const onDrop = useCallback(acceptedFiles => {
@@ -194,7 +194,7 @@ function ProductForm ({ auth, onSubmit, product }) {
                 bg: 'blue.500'
               }}
             >
-              Add
+              {submitButtonText}
             </Button>
           </Stack>
         </Stack>
@@ -203,7 +203,7 @@ function ProductForm ({ auth, onSubmit, product }) {
   )
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   auth: state.auth,
   product: state.product
 })
