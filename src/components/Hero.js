@@ -1,4 +1,5 @@
 import {
+  Center,
   Container,
   Stack,
   Flex,
@@ -8,22 +9,33 @@ import {
   // Button,
   Image,
   Icon,
+  Spinner,
   useColorModeValue
 } from '@chakra-ui/react'
+import ProductList from './Product/ProductList'
 
-export default function Hero () {
+import { getLatestProducts } from '../redux/reducer/productSlice'
+import { connect } from 'react-redux'
+import { useEffect } from 'react'
+
+function Hero ({ product, getLatestProducts }) {
+  useEffect(() => {
+    getLatestProducts(8)
+  }, [])
   return (
     <Container maxW={'7xl'}>
       <Stack
         align={'center'}
         spacing={{ base: 8, md: 10 }}
         py={{ base: 20, md: 28 }}
-        direction={{ base: 'column', md: 'row' }}>
+        direction={{ base: 'column', md: 'row' }}
+      >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
             lineHeight={1.1}
             fontWeight={600}
-            fontSize={{ base: '3xl', sm: '4xl', lg: '6xl' }}>
+            fontSize={{ base: '3xl', sm: '4xl', lg: '6xl' }}
+          >
             <Text
               as={'span'}
               position={'relative'}
@@ -36,7 +48,8 @@ export default function Hero () {
                 left: 0,
                 bg: 'blue.400',
                 zIndex: -1
-              }}>
+              }}
+            >
               Welcome To
             </Text>
             <br />
@@ -49,15 +62,16 @@ export default function Hero () {
           </Text>
           <Stack
             spacing={{ base: 4, sm: 6 }}
-            direction={{ base: 'column', sm: 'row' }}>
-          </Stack>
+            direction={{ base: 'column', sm: 'row' }}
+          ></Stack>
         </Stack>
         <Flex
           flex={1}
           justify={'center'}
           align={'center'}
           position={'relative'}
-          w={'full'}>
+          w={'full'}
+        >
           <Blob
             w={'150%'}
             h={'150%'}
@@ -73,7 +87,8 @@ export default function Hero () {
             rounded={'2xl'}
             boxShadow={'2xl'}
             width={'full'}
-            overflow={'hidden'}>
+            overflow={'hidden'}
+          >
             <Image
               alt={'Hero Image'}
               fit={'cover'}
@@ -87,18 +102,47 @@ export default function Hero () {
           </Box>
         </Flex>
       </Stack>
+      <Text
+        fontWeight={400}
+        fontSize={{ base: 'xl', sm: '2xl', lg: '3xl' }}
+        color={'gray.600'}
+      >
+        Our latest products
+      </Text>
+      {product.loading
+        ? (
+        <Center w="100vw" h="100vh">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Center>
+          )
+        : (
+        <ProductList products={product.listProducts} />
+          )}
     </Container>
   )
 }
 
-export const Blob = (props) => {
+const mapStateToProps = state => ({
+  product: state.product
+})
+
+export default connect(mapStateToProps, { getLatestProducts })(Hero)
+
+export const Blob = props => {
   return (
     <Icon
       width={'100%'}
       viewBox="0 0 578 440"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+      {...props}
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"

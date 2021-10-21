@@ -31,6 +31,35 @@ export const addProduct = createAsyncThunk(
   }
 )
 
+export const editProduct = createAsyncThunk(
+  'product/edit',
+  async (data, { rejectWithValue }) => {
+    try {
+      const { files } = data
+      delete data.files
+
+      const formData = new FormData()
+      const jsonData = JSON.stringify(data)
+      formData.append('data', jsonData)
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files.picture', files[i], files[i].name)
+      }
+
+      const res = await api.put(`/products/${data.id}`, formData)
+      toast.success('Successfully updated product')
+      return res.data
+    } catch (error) {
+      const messages = error.response.data.message[0].messages
+      messages.forEach(message => {
+        toast.error(message.message)
+      })
+
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 export const getProductById = createAsyncThunk(
   'product/show',
   async (id, { rejectWithValue }) => {
@@ -49,6 +78,24 @@ export const getProducts = createAsyncThunk(
   async (queryParameter = {}, { rejectWithValue }) => {
     try {
       const res = await api.get('/products', { params: queryParameter })
+
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
+export const getLatestProducts = createAsyncThunk(
+  'product/latest',
+  async (limit = 6, { rejectWithValue }) => {
+    try {
+      const res = await api.get('/products', {
+        params: {
+          _limit: limit,
+          _sort: 'created_at:DESC'
+        }
+      })
 
       return res.data
     } catch (error) {
@@ -96,7 +143,18 @@ export const productSlice = createSlice({
       state.loading = false
     })
 
+    builder.addCase(editProduct.fulfilled, (state, { payload }) => {
+      state.currentProduct = payload
+      state.loading = false
+    })
+
     builder.addCase(getProducts.fulfilled, (state, { payload }) => {
+      state.currentProduct = initialState.currentProduct
+      state.listProducts = payload
+      state.loading = false
+    })
+
+    builder.addCase(getLatestProducts.fulfilled, (state, { payload }) => {
       state.currentProduct = initialState.currentProduct
       state.listProducts = payload
       state.loading = false
@@ -108,7 +166,7 @@ export const productSlice = createSlice({
       state.loading = false
     })
 
-    builder.addCase(getProductById.rejected, (state) => {
+    builder.addCase(getProductById.rejected, state => {
       state.currentProduct = null
       state.loading = false
     })
@@ -116,7 +174,9 @@ export const productSlice = createSlice({
     builder.addCase(deleteProduct.fulfilled, (state, { payload }) => {
       state.currentProduct = initialState.currentProduct
       state.loading = false
-      state.listProducts = state.listProducts.filter(product => product.id !== payload.id)
+      state.listProducts = state.listProducts.filter(
+        product => product.id !== payload.id
+      )
     })
   }
 })

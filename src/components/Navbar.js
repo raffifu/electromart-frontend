@@ -8,6 +8,7 @@ import {
   Collapse,
   Icon,
   Link,
+  Center,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -27,6 +28,8 @@ import {
 } from 'react-router-dom'
 
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
+
+import Search from './Search'
 
 import { connect } from 'react-redux'
 
@@ -73,9 +76,7 @@ function NavigationBar ({ isAuthenticated }) {
             Electro Mart
           </Button>
 
-          <Flex display={{ base: 'none', md: 'flex' }} ml={'center'} mt={2}>
-            <DesktopNav />
-          </Flex>
+          <DesktopNav />
         </Flex>
         {!isAuthenticated &&
           <Stack
@@ -142,8 +143,9 @@ const DesktopNav = () => {
 
   return (
     <Stack direction={'row'} spacing={4}>
+      <Search/>
       {NAV_ITEMS.map((navItem) => (
-        <Box key={navItem.label}>
+        <Center key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
               <Link
@@ -176,7 +178,7 @@ const DesktopNav = () => {
               </PopoverContent>
             )}
           </Popover>
-        </Box>
+        </Center>
       ))}
     </Stack>
   )
@@ -348,65 +350,6 @@ const NAV_ITEMS = [
       },
       {
         label: 'Oppo',
-        href: '#'
-      }
-    ]
-  },
-  {
-    label: 'Gaming & Consoles',
-    children: [
-      {
-        label: 'Playstation',
-        href: '#'
-      },
-      {
-        label: 'Xbox',
-        href: '#'
-      },
-      {
-        label: 'Nintendo',
-        href: '#'
-      }
-    ]
-  },
-  {
-    label: 'Audio',
-    children: [
-      {
-        label: 'Speaker',
-        href: '#'
-      },
-      {
-        label: 'Earphone and Headphones',
-        href: '#'
-      },
-      {
-        label: 'Sound Systen',
-        href: '#'
-      },
-      {
-        label: 'Voice Recorder',
-        href: '#'
-      }
-    ]
-  },
-  {
-    label: 'Office Electronics',
-    children: [
-      {
-        label: 'Printer',
-        href: '#'
-      },
-      {
-        label: 'Photocopy Machine',
-        href: '#'
-      },
-      {
-        label: 'Projector',
-        href: '#'
-      },
-      {
-        label: 'Scanner',
         href: '#'
       }
     ]

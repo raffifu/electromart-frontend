@@ -19,20 +19,64 @@ import { useState } from 'react'
 import { connect } from 'react-redux'
 
 import ProductCard from './ProductCard'
+import { deleteProduct } from '../../redux/reducer/productSlice'
+import { ROLES } from '../../constants'
 
-const NoProductComponent = () => (<Center h="400px" color="grey">
-No product found
-</Center>)
+const NoProductComponent = () => (
+  <Center h="400px" color="grey">
+    No product found
+  </Center>
+)
 
 function ProductList (props) {
   const history = useHistory()
   const [selectedProduct, setSelectedProduct] = useState(null)
-  const { onDelete, products, auth } = props
+  const { deleteProduct, products, auth } = props
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const generateActionComponents = product => {
+    if (auth.isAuthenticated && auth.user.role.id === ROLES.CUSTOMER) {
+      return (
+        <Box display="flex" justifyContent="flex-end">
+          <Button size="xs" colorScheme="teal">Add to cart</Button>
+        </Box>
+      )
+    }
+
+    if (
+      auth.isAuthenticated &&
+      product.users_permissions_user.id === auth.user.id
+    ) {
+      return (
+        <Grid>
+          <Button
+            colorScheme="blue"
+            onClick={e => {
+              e.stopPropagation()
+              history.push(`/EditProduct/${product.id}`)
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={e => {
+              e.stopPropagation()
+              setSelectedProduct(product.id)
+              onOpen()
+            }}
+            colorScheme="red"
+          >
+            Delete
+          </Button>
+        </Grid>
+      )
+    }
+    return <></>
+  }
 
   return (
     <>
-      {auth.isAuthenticated && (
+      {auth.isAuthenticated && auth.user.role.id === ROLES.SELLER && (
         <Box
           margin="40px"
           display="flex"
@@ -53,31 +97,13 @@ function ProductList (props) {
 
       {products.length === 0 && <NoProductComponent />}
 
-      <SimpleGrid
-        minChildWidth="240px"
-        spacing="40px"
-        margin="40px"
-      >
+      <SimpleGrid minChildWidth="240px" spacing="40px" margin="40px">
         {products.map(product => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              actions={
-                <Grid>
-                  <Button colorScheme="blue">Edit</Button>
-                  <Button
-                    onClick={e => {
-                      e.stopPropagation()
-                      setSelectedProduct(product.id)
-                      onOpen()
-                    }}
-                    colorScheme="red"
-                  >
-                    Delete
-                  </Button>
-                </Grid>
-              }
-            />
+          <ProductCard
+            key={product.id}
+            product={product}
+            actions={generateActionComponents(product)}
+          />
         ))}
         <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -92,7 +118,7 @@ function ProductList (props) {
                 colorScheme="red"
                 mr={3}
                 onClick={() => {
-                  onDelete(selectedProduct)
+                  deleteProduct(selectedProduct)
                   onClose()
                 }}
               >
@@ -109,8 +135,7 @@ function ProductList (props) {
 
 const mapStateToProps = (state, ownProps) => ({
   auth: state.auth,
-  products: ownProps.products,
-  onDelete: ownProps.onDelete
+  products: ownProps.products
 })
 
-export default connect(mapStateToProps)(ProductList)
+export default connect(mapStateToProps, { deleteProduct })(ProductList)

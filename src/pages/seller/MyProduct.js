@@ -2,13 +2,13 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ProductList from '../../components/Product/ProductList'
 
-import { getProducts, deleteProduct } from '../../redux/reducer/productSlice'
+import { getProducts } from '../../redux/reducer/productSlice'
 
 import { connect } from 'react-redux'
 import { useEffect } from 'react'
 import { Center, Spinner } from '@chakra-ui/react'
 
-function MyProduct ({ auth, product, getProducts, deleteProduct }) {
+function MyProduct ({ auth, product, getProducts }) {
   useEffect(() => {
     getProducts({ users_permissions_user: auth.user.id })
   }, [])
@@ -28,7 +28,7 @@ function MyProduct ({ auth, product, getProducts, deleteProduct }) {
             />
         </Center>
           )
-        : <ProductList products={product.listProducts} onDelete={deleteProduct} />
+        : <ProductList products={product.listProducts} />
     }
     <Footer/>
     </>
@@ -40,4 +40,4 @@ const mapStateToProps = state => ({
   product: state.product
 })
 
-export default connect(mapStateToProps, { getProducts, deleteProduct })(MyProduct)
+export default connect(mapStateToProps, { getProducts })(MyProduct)

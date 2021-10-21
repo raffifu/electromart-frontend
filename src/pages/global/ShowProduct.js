@@ -36,7 +36,15 @@ function ShowProduct ({ id, auth, product, getProductById, deleteProduct }) {
 
   const SellerActions = (
     <Box display="flex" justifyContent="flex-end">
-      <Button colorScheme="blue">Edit</Button>
+      <Button
+            colorScheme="blue"
+            onClick={e => {
+              e.stopPropagation()
+              history.push(`/EditProduct/${product.id}`)
+            }}
+          >
+            Edit
+          </Button>
       <Button
         onClick={() => {
           onOpen()
