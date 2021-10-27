@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import { InputGroup, InputLeftElement, Input } from '@chakra-ui/react'
 
@@ -9,7 +9,13 @@ function Search ({ getProducts }) {
   const [name, setName] = useState('')
   const [timer, setTimer] = useState('')
 
+  const firstUpdate = useRef(true)
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
+
     clearTimeout(timer)
     setTimer(setTimeout(() => {
       getProducts(name !== '' ? { name_contains: name } : {})
