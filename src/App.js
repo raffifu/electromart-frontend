@@ -16,7 +16,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import ProfilePage from './pages/ProfilePage'
 
-import setAuthToken from './utils/setAuthToken'
+import { setAuthToken } from './utils'
 
 import { store } from './redux/store'
 import { loadUser } from './redux/reducer/authSlice'
