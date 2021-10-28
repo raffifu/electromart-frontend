@@ -20,6 +20,7 @@ import ProductDetail from '../../components/Product/ProductDetail'
 import { useHistory } from 'react-router-dom'
 
 import { getProductById, deleteProduct } from '../../redux/reducer/productSlice'
+import { addCart } from '../../redux/reducer/cartSlice'
 
 import { connect } from 'react-redux'
 import { useEffect } from 'react'
@@ -30,21 +31,21 @@ const NoProductComponent = () => (
   </Center>
 )
 
-function ShowProduct ({ id, auth, product, getProductById, deleteProduct }) {
+function ShowProduct ({ id, auth, product, getProductById, deleteProduct, addCart }) {
   const history = useHistory()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const SellerActions = (
     <Box display="flex" justifyContent="flex-end">
       <Button
-            colorScheme="blue"
-            onClick={e => {
-              e.stopPropagation()
-              history.push(`/EditProduct/${product.id}`)
-            }}
-          >
-            Edit
-          </Button>
+        colorScheme="blue"
+        onClick={e => {
+          e.stopPropagation()
+          history.push(`/EditProduct/${product.id}`)
+        }}
+      >
+        Edit
+      </Button>
       <Button
         onClick={() => {
           onOpen()
@@ -58,7 +59,19 @@ function ShowProduct ({ id, auth, product, getProductById, deleteProduct }) {
 
   const CustomerActions = (
     <Box display="flex" justifyContent="flex-end">
-      <Button colorScheme="teal">Add to cart</Button>
+      <Button
+        colorScheme="teal"
+        onClick={e => {
+          const formData = {
+            product: product.id,
+            users_permissions_user: auth.user.id,
+            quantity: 1
+          }
+          addCart(formData)
+        }}
+      >
+        Add to cart
+      </Button>
     </Box>
   )
 
@@ -139,4 +152,6 @@ const mapStateToProps = (state, ownProps) => ({
   product: state.product
 })
 
-export default connect(mapStateToProps, { getProductById, deleteProduct })(ShowProduct)
+export default connect(mapStateToProps, { getProductById, deleteProduct, addCart })(
+  ShowProduct
+)

@@ -122,7 +122,7 @@ function ProductDetail ({ product, actions }) {
           <FormControl id="stock">
             <FormLabel>
               {' '}
-              <b>Description</b> : {product.stock}
+              <b>Stok</b> : {product.stock}
             </FormLabel>
           </FormControl>
           <FormControl id="description">

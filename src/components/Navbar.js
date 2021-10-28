@@ -23,17 +23,18 @@ import {
   ChevronRightIcon
 } from '@chakra-ui/icons'
 
-import {
-  Link as RouteLink
-} from 'react-router-dom'
+import { AiOutlineShoppingCart } from 'react-icons/ai'
+
+import { Link as RouteLink } from 'react-router-dom'
 
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
 
 import Search from './Search'
+import { ROLES } from '../constants'
 
 import { connect } from 'react-redux'
 
-function NavigationBar ({ isAuthenticated }) {
+function NavigationBar ({ isAuthenticated, user }) {
   const { isOpen, onToggle } = useDisclosure()
 
   return (
@@ -47,11 +48,13 @@ function NavigationBar ({ isAuthenticated }) {
         borderBottom={1}
         borderStyle={'solid'}
         borderColor={useColorModeValue('gray.200', 'gray.900')}
-        align={'center'}>
+        align={'center'}
+      >
         <Flex
           flex={{ base: 1, md: 'auto' }}
           ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}>
+          display={{ base: 'flex', md: 'none' }}
+        >
           <IconButton
             onClick={onToggle}
             icon={
@@ -72,74 +75,79 @@ function NavigationBar ({ isAuthenticated }) {
             to={'/'}
             _hover={{
               bg: 'gray.100'
-            }}>
+            }}
+          >
             Electro Mart
           </Button>
 
           <DesktopNav />
         </Flex>
-        {!isAuthenticated &&
+        {!isAuthenticated && (
           <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={'flex-end'}
-          direction={'row'}
-          spacing={6}>
-          <Button
-            as={RouteLink}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'link'}
-            to={'/login'}>
+            flex={{ base: 1, md: 0 }}
+            justify={'flex-end'}
+            direction={'row'}
+            spacing={6}
+          >
+            <Button
+              as={RouteLink}
+              fontSize={'sm'}
+              fontWeight={400}
+              variant={'link'}
+              to={'/login'}
+            >
               Log In
-          </Button>
-          <Button
-            as={RouteLink}
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'blue.400'}
-            to={'/register'}
-            _hover={{
-              bg: 'blue.300'
-            }}>
-            Sign Up
-          </Button>
-        </Stack>}
-        {isAuthenticated &&
+            </Button>
+            <Button
+              as={RouteLink}
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'blue.400'}
+              to={'/register'}
+              _hover={{
+                bg: 'blue.300'
+              }}
+            >
+              Sign Up
+            </Button>
+          </Stack>
+        )}
+        {isAuthenticated && (
           <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={'flex-end'}
-          direction={'row'}
-          spacing={6}>
-          <Button
-            as={RouteLink}
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'black'}
-            bg={'white.400'}
-            to={'/Cart'}
-            _hover={{
-              bg: 'white.600'
-            }}>
-            My Cart
-          </Button>
-          <Button
-            as={RouteLink}
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'blue.400'}
-            to={'/profilePage'}
-            _hover={{
-              bg: 'blue.600'
-            }}>
-            Profile
-          </Button>
-        </Stack>}
-        <ColorModeSwitcher/>
+            flex={{ base: 1, md: 0 }}
+            justify={'flex-end'}
+            direction={'row'}
+            spacing={6}
+          >
+            {user.role.id === ROLES.CUSTOMER && (
+              <IconButton
+                as={RouteLink}
+                to={'/carts'}
+                variant="outline"
+                colorScheme="blue"
+                aria-label="Search database"
+                icon={<AiOutlineShoppingCart />}
+              />
+            )}
+            <Button
+              as={RouteLink}
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'blue.400'}
+              to={'/profilePage'}
+              _hover={{
+                bg: 'blue.600'
+              }}
+            >
+              Profile
+            </Button>
+          </Stack>
+        )}
+        <ColorModeSwitcher />
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -156,8 +164,8 @@ const DesktopNav = () => {
 
   return (
     <Stack direction={'row'} spacing={4}>
-      <Search/>
-      {NAV_ITEMS.map((navItem) => (
+      <Search />
+      {NAV_ITEMS.map(navItem => (
         <Center key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
@@ -170,7 +178,8 @@ const DesktopNav = () => {
                 _hover={{
                   textDecoration: 'none',
                   color: linkHoverColor
-                }}>
+                }}
+              >
                 {navItem.label}
               </Link>
             </PopoverTrigger>
@@ -182,9 +191,10 @@ const DesktopNav = () => {
                 bg={popoverContentBgColor}
                 p={4}
                 rounded={'xl'}
-                minW={'sm'}>
+                minW={'sm'}
+              >
                 <Stack>
-                  {navItem.children.map((child) => (
+                  {navItem.children.map(child => (
                     <DesktopSubNav key={child.label} {...child} />
                   ))}
                 </Stack>
@@ -205,13 +215,15 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
       display={'block'}
       p={2}
       rounded={'md'}
-      _hover={{ bg: useColorModeValue('pink.50', 'gray.900') }}>
+      _hover={{ bg: useColorModeValue('pink.50', 'gray.900') }}
+    >
       <Stack direction={'row'} align={'center'}>
         <Box>
           <Text
             transition={'all .3s ease'}
             _groupHover={{ color: 'pink.400' }}
-            fontWeight={500}>
+            fontWeight={500}
+          >
             {label}
           </Text>
           <Text fontSize={'sm'}>{subLabel}</Text>
@@ -223,7 +235,8 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
           _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
           justify={'flex-end'}
           align={'center'}
-          flex={1}>
+          flex={1}
+        >
           <Icon color={'pink.400'} w={5} h={5} as={ChevronRightIcon} />
         </Flex>
       </Stack>
@@ -236,8 +249,9 @@ const MobileNav = () => {
     <Stack
       bg={useColorModeValue('white', 'gray.800')}
       p={4}
-      display={{ md: 'none' }}>
-      {NAV_ITEMS.map((navItem) => (
+      display={{ md: 'none' }}
+    >
+      {NAV_ITEMS.map(navItem => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
     </Stack>
@@ -257,10 +271,12 @@ const MobileNavItem = ({ label, children, href }) => {
         align={'center'}
         _hover={{
           textDecoration: 'none'
-        }}>
+        }}
+      >
         <Text
           fontWeight={600}
-          color={useColorModeValue('gray.600', 'gray.200')}>
+          color={useColorModeValue('gray.600', 'gray.200')}
+        >
           {label}
         </Text>
         {children && (
@@ -281,9 +297,10 @@ const MobileNavItem = ({ label, children, href }) => {
           borderLeft={1}
           borderStyle={'solid'}
           borderColor={useColorModeValue('gray.200', 'gray.700')}
-          align={'start'}>
+          align={'start'}
+        >
           {children &&
-            children.map((child) => (
+            children.map(child => (
               <Link key={child.label} py={2} href={child.href}>
                 {child.label}
               </Link>
