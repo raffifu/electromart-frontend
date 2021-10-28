@@ -90,7 +90,7 @@ function NavigationBar ({ isAuthenticated }) {
             fontWeight={400}
             variant={'link'}
             to={'/login'}>
-              Sign in
+              Log In
           </Button>
           <Button
             as={RouteLink}
@@ -112,6 +112,19 @@ function NavigationBar ({ isAuthenticated }) {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
+          <Button
+            as={RouteLink}
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'black'}
+            bg={'white.400'}
+            to={'/Cart'}
+            _hover={{
+              bg: 'white.600'
+            }}>
+            My Cart
+          </Button>
           <Button
             as={RouteLink}
             display={{ base: 'none', md: 'inline-flex' }}

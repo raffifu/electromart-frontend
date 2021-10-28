@@ -25,6 +25,7 @@ import PrivateRoute from './routing/PrivateRoute'
 
 // routes
 import productRoutes from './routes/productRoutes'
+import Cart from './pages/Cart'
 
 function App () {
   if (localStorage.token) {
@@ -39,10 +40,19 @@ function App () {
         <ToastContainer autoClose={3000} hideProgressBar pauseOnHover={false} />
         <Switch>
           <Route path="/login">
+            <Navbar />
             <Login />
+            <Footer />
           </Route>
           <Route path="/register">
+            <Navbar />
             <Register />
+            <Footer />
+          </Route>
+          <Route path="/Cart">
+            <Navbar />
+            <Cart />
+            <Footer />
           </Route>
           {/* Private Routes */}
           <PrivateRoute path="/ProfilePage" component={ProfilePage} />
