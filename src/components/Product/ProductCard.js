@@ -1,10 +1,13 @@
 import { Badge, Box, Flex, Image } from '@chakra-ui/react'
 import { useHistory } from 'react-router-dom'
+import { connect } from 'react-redux'
+
+import { sendTracker } from '../../utils'
 
 import NoImage from '../../assets/images/no_image.png'
-import { backendUrl } from '../../constants'
+import { backendUrl, ROLES } from '../../constants'
 
-export default function ProductCard ({ actions, product }) {
+function ProductCard ({ actions, product, auth }) {
   const history = useHistory()
 
   const getPictureUrl = (pic) => {
@@ -25,6 +28,13 @@ export default function ProductCard ({ actions, product }) {
       justifyContent="space-between"
       flexDirection="column"
       onClick={() => {
+        if (auth.isAuthenticated && auth.user.role.id === ROLES.CUSTOMER) {
+          sendTracker({
+            productId: product.id,
+            userId: auth.user.id
+          }, 'click_product')
+        }
+
         history.push('/product/' + product.id)
       }}
       style={{ cursor: 'pointer' }}
@@ -81,3 +91,9 @@ export default function ProductCard ({ actions, product }) {
     </Box>
   )
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps)(ProductCard)
