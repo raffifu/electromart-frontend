@@ -20,7 +20,9 @@ import { connect } from 'react-redux'
 
 import ProductCard from './ProductCard'
 import { deleteProduct } from '../../redux/reducer/productSlice'
+import { addCart } from '../../redux/reducer/cartSlice'
 import { ROLES } from '../../constants'
+import { store } from '../../redux/store'
 
 const NoProductComponent = () => (
   <Center h="400px" color="grey">
@@ -38,7 +40,22 @@ function ProductList (props) {
     if (auth.isAuthenticated && auth.user.role.id === ROLES.CUSTOMER) {
       return (
         <Box display="flex" justifyContent="flex-end">
-          <Button size="xs" colorScheme="teal">Add to cart</Button>
+          <Button
+            size="xs"
+            colorScheme="teal"
+            onClick={e => {
+              e.stopPropagation()
+              console.log('clicked cart')
+              const formData = {
+                product: product.id,
+                users_permissions_user: auth.user.id,
+                quantity: 1
+              }
+              store.dispatch(addCart(formData))
+            }}
+          >
+            Add to cart
+          </Button>
         </Box>
       )
     }
@@ -138,4 +155,4 @@ const mapStateToProps = (state, ownProps) => ({
   products: ownProps.products
 })
 
-export default connect(mapStateToProps, { deleteProduct })(ProductList)
+export default connect(mapStateToProps, { deleteProduct, addCart })(ProductList)
