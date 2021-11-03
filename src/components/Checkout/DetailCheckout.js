@@ -47,12 +47,11 @@ function DetailCheckout ({ products }) {
               <Td isNumeric>{formatter.format(cart.product.price)}</Td>
             </Tr>
           ))}
-          <Divider />
           <Tr>
             <Td colSpan="2" align="start">
               Total
             </Td>
-            <Td align="end">
+            <Td align="end" isNumeric>
               {formatter.format(calculateTotalPrice())}
             </Td>
           </Tr>

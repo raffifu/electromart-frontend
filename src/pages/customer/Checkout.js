@@ -12,12 +12,14 @@ import Navbar from '../../components/Navbar'
 import { connect } from 'react-redux'
 
 import { getCartByUserId } from '../../redux/reducer/cartSlice'
+import { getAllCourier } from '../../redux/reducer/courierSlice'
 
 import { useEffect } from 'react'
 
-const Checkout = ({ auth, cart, getCartByUserId }) => {
+const Checkout = ({ auth, cart, courier, getCartByUserId, getAllCourier }) => {
   useEffect(async () => {
     await getCartByUserId(auth.user.id)
+    await getAllCourier()
   }, [])
   return (
     <>
@@ -29,8 +31,8 @@ const Checkout = ({ auth, cart, getCartByUserId }) => {
           </Heading>
           <Stack spacing={2}>
             <Address />
-            <DetailCheckout products={cart.listCarts} />
-            <Logistic />
+            <DetailCheckout products={cart.listCarts} courierCost={courier.cost} />
+            <Logistic courier={courier} weight={cart.listCarts.map(cart => cart.product.weightInGrams * cart.quantity).reduce((a, b) => a + b, 0)} />
             <Payment />
           </Stack>
           <Flex justifyContent="flex-end">
@@ -54,9 +56,10 @@ const Checkout = ({ auth, cart, getCartByUserId }) => {
 const mapStateToProps = (state, ownProps) => ({
   id: ownProps.match.params.id,
   auth: state.auth,
-  cart: state.cart
+  cart: state.cart,
+  courier: state.courier
 })
 
 export default connect(mapStateToProps, {
-  getCartByUserId
+  getCartByUserId, getAllCourier
 })(Checkout)
