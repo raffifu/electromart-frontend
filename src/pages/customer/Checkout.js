@@ -20,22 +20,33 @@ import {
 import Navbar from '../../components/Navbar'
 import { connect } from 'react-redux'
 
-import { getCartByUserId } from '../../redux/reducer/cartSlice'
+import { getCartByUserId, getSellerByIds } from '../../redux/reducer/cartSlice'
 import { getCustomerAddressByUserId } from '../../redux/reducer/customerAddressSlice'
+import { getAllCourier } from '../../redux/reducer/courierSlice'
 
 import { useEffect } from 'react'
 
 const Checkout = ({
   auth,
   cart,
-  getCartByUserId,
+  courier,
   customerAddress,
-  getCustomerAddressByUserId
+  getCustomerAddressByUserId,
+  getCartByUserId,
+  getAllCourier,
+  getSellerByIds
 }) => {
   useEffect(async () => {
     await getCartByUserId(auth.user.id)
+    await getAllCourier()
     await getCustomerAddressByUserId(auth.user.id)
   }, [])
+
+  useEffect(async () => {
+    await getSellerByIds(
+      cart.listCarts.map(entity => entity.product.users_permissions_user)
+    )
+  }, [cart.listCarts])
   const primaryAddress = customerAddress.listCustomerAddresss.filter(
     addr => addr.primary
   )[0]
@@ -52,8 +63,32 @@ const Checkout = ({
             <>
               <Stack spacing={2}>
                 <Address detail={primaryAddress.detail} />
-                <DetailCheckout products={cart.listCarts} />
-                <Logistic />
+                <DetailCheckout
+                  products={cart.listCarts}
+                  sellers={cart.sellerList.map(seller => {
+                    return {
+                      id: seller.id,
+                      name: seller.firstName + ' ' + seller.lastName,
+                      address: seller.seller_addresses.filter(
+                        addr => addr.primary
+                      )[0]
+                    }
+                  })}
+                />
+                <Logistic
+                  courier={courier}
+                  address={primaryAddress}
+                  products={cart.listCarts}
+                  sellers={cart.sellerList.map(seller => {
+                    return {
+                      id: seller.id,
+                      name: seller.firstName + ' ' + seller.lastName,
+                      address: seller.seller_addresses.filter(
+                        addr => addr.primary
+                      )[0]
+                    }
+                  })}
+                />
                 <Payment />
               </Stack>
               <Flex justifyContent="flex-end">
@@ -88,10 +123,13 @@ const mapStateToProps = (state, ownProps) => ({
   id: ownProps.match.params.id,
   auth: state.auth,
   cart: state.cart,
-  customerAddress: state.customerAddress
+  customerAddress: state.customerAddress,
+  courier: state.courier
 })
 
 export default connect(mapStateToProps, {
   getCartByUserId,
-  getCustomerAddressByUserId
+  getAllCourier,
+  getCustomerAddressByUserId,
+  getSellerByIds
 })(Checkout)

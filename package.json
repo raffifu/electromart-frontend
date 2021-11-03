@@ -44,8 +44,7 @@
       "not dead",
       "not op_mini all"
     ],
-    "development": [
-    ]
+    "development": []
   },
   "devDependencies": {
     "eslint": "^7.32.0",
