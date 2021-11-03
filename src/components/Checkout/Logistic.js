@@ -59,7 +59,6 @@ function Logistic ({ courier, products, sellers, address }) {
             address.latitude,
             address.longitude
           )
-          console.log('distance', distance)
           let weight = 0
           products
             .filter(
@@ -69,7 +68,9 @@ function Logistic ({ courier, products, sellers, address }) {
           const entity = {
             id: seller.id,
             sellerName: seller.name,
-            cost: (distance * courierData.cost_per_km * weight) / 1000
+            cost:
+              courierData.cost +
+              (distance * courierData.cost_per_km * weight) / 1000
           }
           setCourierCost([...courierCost, entity])
         }
@@ -90,7 +91,10 @@ function Logistic ({ courier, products, sellers, address }) {
           icon={<ChevronDownIcon />}
           variant="outline"
           size="lg"
-          onChange={e => setSelectedCourier(e.target.value)}
+          onChange={e => {
+            setCourierCost([])
+            setSelectedCourier(e.target.value)
+          }}
           value={selectedCourier}
           placeholder="Pilih Kurir"
         >
