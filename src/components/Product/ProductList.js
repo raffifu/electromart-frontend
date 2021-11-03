@@ -45,7 +45,6 @@ function ProductList (props) {
             colorScheme="teal"
             onClick={e => {
               e.stopPropagation()
-              console.log('clicked cart')
               const formData = {
                 product: product.id,
                 users_permissions_user: auth.user.id,

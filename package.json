@@ -8,16 +8,19 @@
     "@craco/craco": "^6.3.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@react-leaflet/core": "1.0.2",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.9.0",
     "@testing-library/react": "^10.2.1",
     "@testing-library/user-event": "^12.0.2",
     "axios": "^0.21.4",
     "framer-motion": "^4.0.0",
+    "leaflet": "^1.7.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.4.2",
     "react-icons": "^3.0.0",
+    "react-leaflet": "^3.2.2",
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
@@ -41,11 +44,7 @@
       "not dead",
       "not op_mini all"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "development": []
   },
   "devDependencies": {
     "eslint": "^7.32.0",
@@ -55,5 +54,8 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.26.0",
     "redux-devtools": "^3.7.0"
+  },
+  "resolutions": {
+    "react-leaflet/@react-leaflet/core": "1.0.2"
   }
 }

@@ -51,6 +51,23 @@ export const getCartByUserId = createAsyncThunk(
   }
 )
 
+export const getSellerByIds = createAsyncThunk(
+  'cart/sellers',
+  async (sellerIds, { rejectWithValue }) => {
+    try {
+      let queryString = ''
+      sellerIds.forEach(sellerId => {
+        queryString += `id_in=${sellerId}&`
+      })
+      const res = await api.get(`/users?${queryString}`)
+
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 const initialState = {
   listCarts: [],
   currentCart: {
@@ -59,6 +76,7 @@ const initialState = {
     users_permissions_user: null,
     quantity: 0
   },
+  sellerList: [],
   loading: true
 }
 
@@ -79,6 +97,11 @@ export const cartSlice = createSlice({
     builder.addCase(getCartByUserId.fulfilled, (state, { payload }) => {
       state.currentCart = initialState.currentCart
       state.listCarts = payload
+      state.loading = false
+    })
+
+    builder.addCase(getSellerByIds.fulfilled, (state, { payload }) => {
+      state.sellerList = payload
       state.loading = false
     })
   }

@@ -5,6 +5,8 @@ import initSubscriber from 'redux-subscriber'
 import authReducer from './reducer/authSlice'
 import productReducer from './reducer/productSlice'
 import cartReducer from './reducer/cartSlice'
+import customerAddressReducer from './reducer/customerAddressSlice'
+import sellerAddressReducer from './reducer/sellerAddressSlice'
 import courierReducer from './reducer/courierSlice'
 
 export const store = configureStore({
@@ -12,6 +14,8 @@ export const store = configureStore({
     auth: authReducer,
     product: productReducer,
     cart: cartReducer,
+    customerAddress: customerAddressReducer,
+    sellerAddress: sellerAddressReducer,
     courier: courierReducer
   }
 })

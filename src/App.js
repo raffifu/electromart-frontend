@@ -26,6 +26,7 @@ import PrivateRoute from './routing/PrivateRoute'
 // routes
 import productRoutes from './routes/productRoutes'
 import cartRoutes from './routes/cartRoutes'
+import addressRoutes from './routes/addressRoutes'
 
 function App () {
   if (localStorage.token) {
@@ -73,6 +74,27 @@ function App () {
           })}
 
           {cartRoutes.map(route => {
+            if (route.type === 'private') {
+              return (
+                <PrivateRoute
+                  key={route.path}
+                  path={route.path}
+                  component={route.component}
+                  allowedRoles={route.allowedRoles}
+                />
+              )
+            }
+            const { component: Component } = route
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                render={props => <Component {...props} />}
+              />
+            )
+          })}
+
+          {addressRoutes.map(route => {
             if (route.type === 'private') {
               return (
                 <PrivateRoute

@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { backendUrl } from '../constants'
 
 const api = axios.create({
-  baseURL: 'https://electromart-be.an0nvi.xyz/',
+  baseURL: backendUrl + '/',
   headers: {
     'Content-Type': 'application/json'
   }
