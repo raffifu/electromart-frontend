@@ -20,11 +20,16 @@ import {
 import Navbar from '../../components/Navbar'
 import { connect } from 'react-redux'
 
-import { getCartByUserId, getSellerByIds } from '../../redux/reducer/cartSlice'
+import {
+  getCartByUserId,
+  getSellerByIds,
+  checkout
+} from '../../redux/reducer/cartSlice'
 import { getCustomerAddressByUserId } from '../../redux/reducer/customerAddressSlice'
 import { getAllCourier } from '../../redux/reducer/courierSlice'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 const Checkout = ({
   auth,
@@ -34,8 +39,13 @@ const Checkout = ({
   getCustomerAddressByUserId,
   getCartByUserId,
   getAllCourier,
-  getSellerByIds
+  getSellerByIds,
+  checkout
 }) => {
+  const [paymentMethod, setPaymentMethod] = useState(null)
+  const [courierCost, setCourierCost] = useState([])
+  const history = useHistory()
+
   useEffect(async () => {
     await getCartByUserId(auth.user.id)
     await getAllCourier()
@@ -50,6 +60,78 @@ const Checkout = ({
   const primaryAddress = customerAddress.listCustomerAddresss.filter(
     addr => addr.primary
   )[0]
+
+  const isAbleToCheckout = () => {
+    if (cart.sellerList.length === 0) return false
+    for (let i = 0; i < cart.sellerList.length; i++) {
+      if (cart.sellerList[i].seller_addresses.length === 0) return false
+    }
+
+    return true
+  }
+
+  const calculateTotalPriceBySellerId = sellerId => {
+    let total = 0
+    cart.listCarts
+      .filter(entity => entity.product.users_permissions_user === sellerId)
+      .map(cart => {
+        total += cart.product.price * cart.quantity
+        return null
+      })
+    return total
+  }
+
+  const calculateTotalPrice = () => {
+    let total = 0
+    cart.listCarts.map(cart => {
+      total += cart.product.price * cart.quantity
+      return null
+    })
+    return total
+  }
+
+  const calculateGrandTotal = () => {
+    let total = 0
+    courierCost.map(c => {
+      total += c.cost
+      return 1
+    })
+    total += calculateTotalPrice()
+    return total
+  }
+
+  const submitOrder = async () => {
+    const data = {
+      payment_method: paymentMethod,
+      grand_total: calculateGrandTotal(),
+      sellers: cart.sellerList.map(seller => {
+        return {
+          id: seller.id,
+          products: cart.listCarts
+            .filter(
+              entity => entity.product.users_permissions_user === seller.id
+            )
+            .map(cart => {
+              return { id: cart.product.id }
+            }),
+          total_price: calculateTotalPriceBySellerId(seller.id),
+          shipping_price: courierCost.filter(cost => cost.id === seller.id)[0]
+            .cost
+        }
+      }),
+      user: {
+        id: auth.user.id,
+        address: primaryAddress.id
+      },
+      cart: cart.listCarts.map(cart => cart.id)
+    }
+    await checkout(data)
+  }
+
+  useEffect(() => {
+    if (cart.paymentId) history.push(`/payment/${cart.paymentId}`)
+  }, [cart.paymentId])
+
   return (
     <>
       <Navbar />
@@ -88,8 +170,13 @@ const Checkout = ({
                       )[0]
                     }
                   })}
+                  courierCost={courierCost}
+                  setCourierCost={setCourierCost}
                 />
-                <Payment />
+                <Payment
+                  paymentMethod={paymentMethod}
+                  setPaymentMethod={setPaymentMethod}
+                />
               </Stack>
               <Flex justifyContent="flex-end">
                 <Button
@@ -99,6 +186,8 @@ const Checkout = ({
                   leftIcon={<CheckIcon />}
                   colorScheme="green"
                   mt={4}
+                  disabled={!isAbleToCheckout()}
+                  onClick={submitOrder}
                 >
                   Checkout
                 </Button>
@@ -131,5 +220,6 @@ export default connect(mapStateToProps, {
   getCartByUserId,
   getAllCourier,
   getCustomerAddressByUserId,
-  getSellerByIds
+  getSellerByIds,
+  checkout
 })(Checkout)
