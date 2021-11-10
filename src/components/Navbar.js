@@ -24,6 +24,7 @@ import {
 } from '@chakra-ui/icons'
 
 import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { IoMdSync } from 'react-icons/io'
 
 import { Link as RouteLink } from 'react-router-dom'
 
@@ -122,14 +123,24 @@ function NavigationBar ({ isAuthenticated, user }) {
             spacing={6}
           >
             {user.role.id === ROLES.CUSTOMER && (
-              <IconButton
-                as={RouteLink}
-                to={'/carts'}
-                variant="outline"
-                colorScheme="blue"
-                aria-label="Search database"
-                icon={<AiOutlineShoppingCart />}
-              />
+              <>
+                <IconButton
+                  as={RouteLink}
+                  to={'/carts'}
+                  variant="outline"
+                  colorScheme="blue"
+                  aria-label="Search database"
+                  icon={<AiOutlineShoppingCart />}
+                />
+                <IconButton
+                  as={RouteLink}
+                  to={'/'}
+                  variant="outline"
+                  colorScheme="blue"
+                  aria-label="Search database"
+                  icon={<IoMdSync />}
+                />
+              </>
             )}
             <Button
               as={RouteLink}
