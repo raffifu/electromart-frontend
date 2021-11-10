@@ -9,6 +9,7 @@ import customerAddressReducer from './reducer/customerAddressSlice'
 import sellerAddressReducer from './reducer/sellerAddressSlice'
 import courierReducer from './reducer/courierSlice'
 import paymentMethodReducer from './reducer/paymentMethodSlice'
+import orderReducer from './reducer/orderSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     customerAddress: customerAddressReducer,
     sellerAddress: sellerAddressReducer,
     courier: courierReducer,
-    paymentMethod: paymentMethodReducer
+    paymentMethod: paymentMethodReducer,
+    order: orderReducer
   }
 })
 
