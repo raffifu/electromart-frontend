@@ -35,9 +35,8 @@ function toRad (Value) {
   return (Value * Math.PI) / 180
 }
 
-function Logistic ({ courier, products, sellers, address }) {
+function Logistic ({ courier, products, sellers, address, courierCost, setCourierCost }) {
   const [selectedCourier, setSelectedCourier] = useState()
-  const [courierCost, setCourierCost] = useState([])
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',

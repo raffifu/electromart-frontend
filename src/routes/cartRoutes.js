@@ -19,7 +19,7 @@ const cartRoutes = [
     type: 'private'
   },
   {
-    path: '/payment',
+    path: '/payment/:paymentId',
     component: Payment,
     allowedRoles: [ROLES.CUSTOMER],
     type: 'private'
